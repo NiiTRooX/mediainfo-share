@@ -6,7 +6,7 @@
         <div class="p-6 border-b border-[#30363d]">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-semibold text-[#e6edf3]">File Information</h1>
+                    <h1 class="text-2xl font-semibold text-[#e6edf3]">{{ media_info.general.complete_name }}</h1>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Video</h2>
                     <div class="space-y-2">
                         <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Format:</span> {{ media_info.video.format }}</p>
-                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Resolution:</span> {{ media_info.video.resolution.width }}x{{ media_info.video.resolution.height }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Resolution:</span> {{ media_info.video.width }}x{{ media_info.video.height }}</p>
                         <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Aspect Ratio:</span> {{ media_info.video.aspect_ratio }}</p>
                         <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Frame Rate:</span> {{ media_info.video.frame_rate }}</p>
                         <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Bit Depth:</span> {{ media_info.video.bit_depth }}</p>

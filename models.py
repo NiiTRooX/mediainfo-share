@@ -17,12 +17,14 @@ class MediaGeneral:
     bitrate: str = ""
     size: str = ""
     frame_rate: str = ""
+    complete_name: str = ""
 
 
 @dataclass
 class MediaVideo:
     format: str = ""
-    resolution: MediaResolution = field(default_factory=MediaResolution)
+    width: str = ""
+    height: str = ""
     aspect_ratio: str = ""
     frame_rate: str = ""
     bit_rate: str = ""
@@ -84,19 +86,16 @@ class MediaInfo:
         self.video = MediaVideo()
         self.audio: List[AudioTrack] = []
         self.subtitles: List[SubtitleTrack] = []
-        
+
         if parsed_info:
             self._parse_info(parsed_info)
-    
+
     def _parse_info(self, parsed_info: Dict) -> None:
         """Parse the parsed_info dictionary into the appropriate fields."""
         if "general" in parsed_info:
             self.general = MediaGeneral(**parsed_info["general"])
         if "video" in parsed_info:
-            video_data = parsed_info["video"].copy()
-            if "resolution" in video_data:
-                self.video.resolution = MediaResolution(**video_data.pop("resolution"))
-            self.video = MediaVideo(**video_data)
+            self.video = MediaVideo(**parsed_info["video"])
         if "audio" in parsed_info:
             self.audio = [AudioTrack(**track) for track in parsed_info["audio"]]
         if "subtitles" in parsed_info:
@@ -140,7 +139,6 @@ class MediaInfo:
                 "general": self.general.__dict__,
                 "video": {
                     **self.video.__dict__,
-                    "resolution": self.video.resolution.__dict__
                 },
                 "audio": [track.__dict__ for track in self.audio],
                 "subtitles": [sub.__dict__ for sub in self.subtitles]

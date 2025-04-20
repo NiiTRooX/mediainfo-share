@@ -75,7 +75,6 @@ class Database:
                             "general": media.general.__dict__,
                             "video": {
                                 **media.video.__dict__,
-                                "resolution": media.video.resolution.__dict__
                             },
                             "audio": [track.__dict__ for track in media.audio],
                             "subtitles": [sub.__dict__ for sub in media.subtitles]
@@ -258,7 +257,8 @@ def save_media_info(
         if "video" not in parsed_info:
             parsed_info["video"] = {
                 "format": "",
-                "resolution": {"width": "", "height": ""},
+                "width": "", 
+                "height": "",
                 "aspect_ratio": "",
                 "frame_rate": "",
                 "bit_rate": "",
@@ -316,7 +316,8 @@ def get_media_info(media_id):
             "general": {"format": "", "duration": "", "bitrate": "", "size": ""},
             "video": {
                 "format": "",
-                "resolution": {"width": "", "height": ""},
+                "width": "", 
+                "height": "",
                 "aspect_ratio": "",
                 "frame_rate": "",
                 "bit_rate": "",

@@ -116,7 +116,7 @@ class MediaInfoParser:
         current_track_type: Optional[str],
     ) -> None:
         key = key.lower()
-        
+
         if section == "general":
             if key == "format":
                 info["general"]["format"] = value
@@ -128,29 +128,16 @@ class MediaInfoParser:
                 info["general"]["size"] = value
             elif key == "frame rate":
                 info["general"]["frame_rate"] = value
+            elif key == "complete name":
+                info["general"]["complete_name"] = value
 
         elif section == "video":
             if key == "format":
                 info["video"]["format"] = value
             elif key == "width":
-                if "resolution" not in info["video"]:
-                    info["video"]["resolution"] = {}
-                info["video"]["resolution"]["width"] = value.replace("pixels", "").strip()
+                info["video"]["width"] = value.replace("pixels", "").replace(" ", "").strip()
             elif key == "height":
-                if "resolution" not in info["video"]:
-                    info["video"]["resolution"] = {}
-                info["video"]["resolution"]["height"] = value.replace("pixels", "").strip()
-            elif key == "resolution":
-                if "resolution" not in info["video"]:
-                    info["video"]["resolution"] = {}
-                # Handle both "1920x1080" and single value formats
-                if "x" in value:
-                    width, height = value.split("x")
-                    info["video"]["resolution"]["width"] = width.strip()
-                    info["video"]["resolution"]["height"] = height.strip()
-                else:
-                    info["video"]["resolution"]["width"] = value.strip()
-                    info["video"]["resolution"]["height"] = value.strip()
+                info["video"]["height"] = value.replace("pixels", "").replace(" ", "").strip()
             elif key in ["display aspect ratio", "aspect ratio"]:
                 info["video"]["aspect_ratio"] = value
             elif key in ["frame rate", "frame rate mode"]:
