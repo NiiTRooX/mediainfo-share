@@ -32,6 +32,7 @@ class MediaInfoShare:
         self._setup_routes()
         self._setup_context_processors()
         self._setup_cleanup_task()
+        self._setup_error_handlers()
 
     def _setup_config(self):
         try:
@@ -218,6 +219,39 @@ class MediaInfoShare:
 
         cleanup_thread = threading.Thread(target=cleanup_task, daemon=True)
         cleanup_thread.start()
+
+    def _setup_error_handlers(self):
+        @self.app.errorhandler(404)
+        def not_found_error(error):
+            return render_template('error.html',
+                error_code=404,
+                error_title="Page Not Found",
+                error_description="The page you're looking for doesn't exist or has been moved."
+            ), 404
+
+        @self.app.errorhandler(403)
+        def forbidden_error(error):
+            return render_template('error.html',
+                error_code=403,
+                error_title="Forbidden",
+                error_description="You don't have permission to access this resource."
+            ), 403
+
+        @self.app.errorhandler(500)
+        def internal_error(error):
+            return render_template('error.html',
+                error_code=500,
+                error_title="Internal Server Error",
+                error_description="Something went wrong on our end. Please try again later."
+            ), 500
+
+        @self.app.errorhandler(Exception)
+        def unhandled_exception(error):
+            return render_template('error.html',
+                error_code=500,
+                error_title="Unexpected Error",
+                error_description=str(error) if self.app.debug else "An unexpected error occurred."
+            ), 500
 
     def run(self):
         expired_count = self.db.delete_expired_media()
