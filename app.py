@@ -1,9 +1,23 @@
+"""
+NOTICE OF LICENSE.
+
+Copyright 2025 @AnabolicsAnonymous
+
+Licensed under the Affero General Public License v3.0 (AGPL-3.0)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+"""
+
 import os
 import uuid
 import ssl
 import base64
 import threading
 import time
+import sqlite3
 from datetime import datetime, timedelta
 from flask import (
     Flask,
@@ -24,6 +38,7 @@ load_dotenv()
 
 
 class MediaInfoShare:
+    """Main class for the application"""
     def __init__(self):
         self.app = Flask(__name__)
         self.db = Database()
@@ -42,7 +57,8 @@ class MediaInfoShare:
             else:
                 key = key.encode()
                 key = base64.urlsafe_b64encode(base64.urlsafe_b64decode(key)).decode()
-        except Exception:
+        except ValueError as err:
+            print(f"Invalid ENCRYPTION_KEY format: {err}")
             key = Fernet.generate_key().decode()
 
         self.app.config.update(
@@ -87,7 +103,7 @@ class MediaInfoShare:
 
                     parsed_info = self.parser.parse_file(file_path)
                     media = MediaInfoModel(
-                        id=str(uuid.uuid4()),
+                        media_id=str(uuid.uuid4()),
                         filename=filename,
                         original_filename="MediaInfo Output",
                         uploaded_on=datetime.now(),
@@ -100,9 +116,15 @@ class MediaInfoShare:
                         flash("Error saving media information.")
                         return redirect(url_for("index"))
 
-                    return redirect(url_for("preview", media_id=media.id))
-                except Exception as e:
-                    flash(f"Error processing file: {str(e)}")
+                    return redirect(url_for("preview", media_id=media.media_id))
+                except (OSError, IOError) as e:
+                    flash(f"File system error: {str(e)}")
+                    return redirect(url_for("index"))
+                except ValueError as e:
+                    flash(f"Invalid data format: {str(e)}")
+                    return redirect(url_for("index"))
+                except RuntimeError as e:
+                    flash(f"Processing error: {str(e)}")
                     return redirect(url_for("index"))
 
             return render_template("index.html")
@@ -213,8 +235,12 @@ class MediaInfoShare:
                     expired_count = self.db.delete_expired_media()
                     if expired_count > 0:
                         print(f"Cleaned up {expired_count} expired media entries")
-                except Exception as e:
-                    print(f"Error during cleanup: {str(e)}")
+                except (OSError, IOError) as e:
+                    print(f"File system error during cleanup: {str(e)}")
+                except sqlite3.Error as e:
+                    print(f"Database error during cleanup: {str(e)}")
+                except RuntimeError as e:
+                    print(f"Processing error during cleanup: {str(e)}")
                 time.sleep(3600)
 
         cleanup_thread = threading.Thread(target=cleanup_task, daemon=True)
@@ -222,7 +248,7 @@ class MediaInfoShare:
 
     def _setup_error_handlers(self):
         @self.app.errorhandler(404)
-        def not_found_error(error):
+        def not_found_error():
             return render_template('error.html',
                 error_code=404,
                 error_title="Page Not Found",
@@ -230,7 +256,7 @@ class MediaInfoShare:
             ), 404
 
         @self.app.errorhandler(403)
-        def forbidden_error(error):
+        def forbidden_error():
             return render_template('error.html',
                 error_code=403,
                 error_title="Forbidden",
@@ -238,7 +264,7 @@ class MediaInfoShare:
             ), 403
 
         @self.app.errorhandler(500)
-        def internal_error(error):
+        def internal_error():
             return render_template('error.html',
                 error_code=500,
                 error_title="Internal Server Error",
@@ -247,13 +273,37 @@ class MediaInfoShare:
 
         @self.app.errorhandler(Exception)
         def unhandled_exception(error):
-            return render_template('error.html',
-                error_code=500,
-                error_title="Unexpected Error",
-                error_description=str(error) if self.app.debug else "An unexpected error occurred."
-            ), 500
+            if isinstance(error, (OSError, IOError)):
+                return render_template('error.html',
+                    error_code=500,
+                    error_title="File System Error",
+                    error_description=str(error) if self.app.debug \
+                        else "A file system error occurred."
+                ), 500
+            elif isinstance(error, sqlite3.Error):
+                return render_template('error.html',
+                    error_code=500,
+                    error_title="Database Error",
+                    error_description=str(error) if self.app.debug \
+                        else "A database error occurred."
+                ), 500
+            elif isinstance(error, RuntimeError):
+                return render_template('error.html',
+                    error_code=500,
+                    error_title="Processing Error",
+                    error_description=str(error) if self.app.debug \
+                        else "A processing error occurred."
+                ), 500
+            else:
+                return render_template('error.html',
+                    error_code=500,
+                    error_title="Unexpected Error",
+                    error_description=str(error) if self.app.debug \
+                        else "An unexpected error occurred."
+                ), 500
 
     def run(self):
+        """Start the Flask server and run cleanup task"""
         expired_count = self.db.delete_expired_media()
         if expired_count > 0:
             print(f"Cleaned up {expired_count} expired media entries")

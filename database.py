@@ -1,10 +1,21 @@
-"""Database module for handling media information storage and retrieval."""
+"""
+NOTICE OF LICENSE.
+
+Copyright 2025 @AnabolicsAnonymous
+
+Licensed under the Affero General Public License v3.0 (AGPL-3.0)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+"""
 
 import sqlite3
 import os
 import json
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Any
 from dotenv import load_dotenv
 from models import MediaInfo
 
@@ -64,7 +75,7 @@ class Database:
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                     (
-                        media.id,
+                        media.media_id,
                         media.filename,
                         media.original_filename,
                         media.uploaded_on.isoformat(),
@@ -97,22 +108,24 @@ class Database:
                 row = cursor.fetchone()
                 if not row:
                     return None
-                
-                # Convert row to dictionary using column names
+
                 columns = [description[0] for description in cursor.description]
                 row_dict = dict(zip(columns, row))
-                
-                # Parse the parsed_info field
+
                 if row_dict.get("parsed_info"):
                     try:
                         parsed_info = json.loads(row_dict["parsed_info"])
                         row_dict["parsed"] = parsed_info
-                    except json.JSONDecodeError:
+                    except json.JSONDecodeError as e:
+                        print(f"Error parsing JSON data: {str(e)}")
                         row_dict["parsed"] = {}
-                
+
                 return MediaInfo.from_dict(row_dict)
-        except Exception as e:
-            print(f"Error getting media info: {str(e)}")
+        except sqlite3.Error as e:
+            print(f"Database error while getting media info: {str(e)}")
+            return None
+        except (KeyError, TypeError) as e:
+            print(f"Data structure error while getting media info: {str(e)}")
             return None
 
     def delete_expired_media(self) -> int:
@@ -269,11 +282,11 @@ def save_media_info(
         if "subtitles" not in parsed_info:
             parsed_info["subtitles"] = []
 
-        # Insert into media_info
         cursor.execute(
             """
             INSERT INTO media_info (
-                id, filename, original_filename, uploaded_on, expiration, password, raw_output, parsed_info
+                id, filename, original_filename, uploaded_on,
+                expiration, password, raw_output, parsed_info
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (

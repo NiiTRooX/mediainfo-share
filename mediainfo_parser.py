@@ -1,13 +1,21 @@
-from typing import Dict, Optional
-from models import (
-    MediaGeneral,
-    MediaVideo,
-    AudioTrack,
-    SubtitleTrack,
-)
+"""
+NOTICE OF LICENSE.
 
+Copyright 2025 @AnabolicsAnonymous
+
+Licensed under the Affero General Public License v3.0 (AGPL-3.0)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+"""
+
+from typing import Dict, Optional
+from models import AudioTrack
 
 class MediaInfoParser:
+    """Class for parsing MediaInfo output into a dictionary"""
     def __init__(self):
         self.language_flags = {
             "JP": "🇯🇵",
@@ -27,6 +35,7 @@ class MediaInfoParser:
         }
 
     def get_language_flag(self, lang_code: Optional[str]) -> str:
+        """Get the language flag for a given language code"""
         if not lang_code:
             return ""
 
@@ -37,6 +46,7 @@ class MediaInfoParser:
         return self.language_flags.get(code, "")
 
     def parse_file(self, file_path: str) -> Dict:
+        """Parse the MediaInfo output file into a dictionary"""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = "\n".join(line.strip() for line in f if line.strip())
@@ -90,7 +100,7 @@ class MediaInfoParser:
                 if ":" in line:
                     key, value = map(str.strip, line.split(":", 1))
                     self._parse_key_value(
-                        key, value, current_section, info, current_track, current_track_type
+                        key, value, current_section, info, current_track
                     )
 
             if current_track and current_track_type == "audio":
@@ -113,7 +123,6 @@ class MediaInfoParser:
         section: str,
         info: Dict,
         current_track: Optional[AudioTrack],
-        current_track_type: Optional[str],
     ) -> None:
         key = key.lower()
 
