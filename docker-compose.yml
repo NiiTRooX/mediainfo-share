@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    image: python:3.11-slim
+    container_name: mediainfo-share
+    restart: unless-stopped
+    ports:
+      - "${FLASK_RUN_PORT:-5000}:5000"
+    volumes:
+      - mediainfo-media:/app/static/media
+      - mediainfo-db:/app
+    environment:
+      # Flask Configuration
+      - FLASK_APP=app.py
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - FLASK_DEBUG=${FLASK_DEBUG:-0}
+      - FLASK_RUN_HOST=${FLASK_RUN_HOST:-0.0.0.0}
+      - FLASK_RUN_PORT=${FLASK_RUN_PORT:-5000}
+      
+      # SSL Configuration
+      - SSL_CERT_PATH=${SSL_CERT_PATH:-./cert.pem}
+      - SSL_KEY_PATH=${SSL_KEY_PATH:-./key.pem}
+      - USE_SSL=${USE_SSL:-false}
+      
+      # Upload Configuration
+      - UPLOAD_FOLDER=${UPLOAD_FOLDER:-static/media}
+      - MAX_CONTENT_LENGTH=${MAX_CONTENT_LENGTH:-1048576}
+      - ALLOWED_EXTENSIONS=${ALLOWED_EXTENSIONS:-txt}
+      
+      # Encryption
+      - SECRET_KEY=${SECRET_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      
+      # Donation Addresses (Optional)
+      - BTC_ADDRESS=${BTC_ADDRESS:-}
+      - ETH_ADDRESS=${ETH_ADDRESS:-}
+      - USDC_ADDRESS=${USDC_ADDRESS:-}
+      - LTC_ADDRESS=${LTC_ADDRESS:-}
+    command: >
+      sh -c "apt-get update && apt-get install -y git gcc &&
+      git clone https://github.com/AnabolicsAnonymous/mediainfo-share.git &&
+      cd mediainfo-share &&
+      pip install --no-cache-dir -r requirements.txt &&
+      mkdir -p static/media &&
+      python3 app.py"
+    networks:
+      - mediainfo-network
+
+networks:
+  mediainfo-network:
+    driver: bridge
+
+volumes:
+  mediainfo-media:
+  mediainfo-db: 
