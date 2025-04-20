@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-[#0c0e15] border border-[#30363d] rounded-lg shadow-lg">
+        <div class="p-6 border-b border-[#30363d]">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-semibold text-[#e6edf3]">File Information</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- General Information -->
+                <div class="bg-[#0f111a] border border-[#30363d] rounded-lg p-4">
+                    <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">General</h2>
+                    <div class="space-y-2">
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Format:</span> {{ media_info.general.format }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Duration:</span> {{ media_info.general.duration }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Bitrate:</span> {{ media_info.general.bitrate }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Size:</span> {{ media_info.general.size }}</p>
+                    </div>
+                </div>
+
+                <!-- Video Information -->
+                <div class="bg-[#0f111a] border border-[#30363d] rounded-lg p-4">
+                    <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Video</h2>
+                    <div class="space-y-2">
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Format:</span> {{ media_info.video.format }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Resolution:</span> {{ media_info.video.resolution.width }}x{{ media_info.video.resolution.height }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Aspect Ratio:</span> {{ media_info.video.aspect_ratio }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Frame Rate:</span> {{ media_info.video.frame_rate }}</p>
+                        <p class="text-[#7d8590]"><span class="font-medium text-[#e6edf3]">Bit Depth:</span> {{ media_info.video.bit_depth }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio Information -->
+            {% if media_info.audio %}
+            <div class="mt-6">
+                <div class="bg-[#0f111a] border border-[#30363d] rounded-lg p-4">
+                    <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Audio</h2>
+                    <div class="space-y-6">
+                        {% for track in media_info.audio %}
+                        <div class="{% if not loop.last %}border-b border-[#30363d] pb-6{% endif %}">
+                            <h3 class="text-lg font-medium text-[#e6edf3] mb-4">Track {{ loop.index }}</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Language:</span>
+                                        <span class="text-[#e6edf3]">{{ track.language }}</span>
+                                        {% if track.flag %}
+                                        <span class="ml-2">{{ track.flag }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Format:</span>
+                                        <span class="text-[#e6edf3]">{{ track.format }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Commercial Name:</span>
+                                        <span class="text-[#e6edf3]">{{ track.commercial_name }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Channels:</span>
+                                        <span class="text-[#e6edf3]">{{ track.channels }}</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Bit Rate:</span>
+                                        <span class="text-[#e6edf3]">{{ track.bit_rate }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Sampling Rate:</span>
+                                        <span class="text-[#e6edf3]">{{ track.sampling_rate }}</span>
+                                    </div>
+                                    {% if track.title %}
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32">Title:</span>
+                                        <span class="text-[#e6edf3]">{{ track.title }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Subtitles Information -->
+            {% if media_info.subtitles %}
+            <div class="mt-6">
+                <div class="bg-[#0f111a] border border-[#30363d] rounded-lg p-4">
+                    <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Subtitles</h2>
+                    <div class="space-y-2">
+                        {% for sub in media_info.subtitles %}
+                        <p class="text-[#7d8590]">{{ sub.language }} {{ sub.flag }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Raw MediaInfo Output -->
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Raw MediaInfo Output</h2>
+                <textarea class="w-full h-64 bg-[#0f111a] text-[#7d8590] p-4 rounded-lg font-mono text-sm border border-[#30363d] focus:border-[#2f81f7] focus:ring-2 focus:ring-[#2f81f7] focus:ring-opacity-20" readonly>{{ media_info.raw_output }}</textarea>
+            </div>
+
+            <!-- Share and Download Links -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <a href="{{ url_for('share', media_id=media_id) }}" class="bg-[#238636] hover:bg-[#2ea043] text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    Share
+                </a>
+                <a href="{{ url_for('download', media_id=media_id) }}" class="bg-[#2f81f7] hover:bg-[#58a6ff] text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    Download
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4">
+    {% if not media_info %}
+        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+            <h2 class="text-lg font-medium mb-4">Password Required</h2>
+            <form method="POST" class="space-y-4">
+                <div>
+                    <label for="password" class="block text-sm text-zinc-400 mb-2">Enter password to access this content</label>
+                    <input type="password" 
+                        name="password" 
+                        id="password" 
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:border-zinc-600 transition-colors"
+                        required
+                    >
+                </div>
+                <div>
+                    <button type="submit" class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="space-y-6">
+            <div class="text-center">
+                <h1 class="text-2xl font-medium mb-3">Share MediaInfo</h1>
+                <p class="text-zinc-400">Copy and share these links</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Share Link -->
+                <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-zinc-400">Share Link</span>
+                        <button onclick="copyToClipboard('shareLink', this)" class="text-zinc-500 hover:text-zinc-300 transition-colors">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <input type="text" 
+                        id="shareLink" 
+                        value="{{ request.url_root }}share/{{ media_id }}"
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm text-zinc-300"
+                        readonly
+                    >
+                </div>
+
+                <!-- Preview Link -->
+                <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-zinc-400">Preview Link</span>
+                        <button onclick="copyToClipboard('previewLink', this)" class="text-zinc-500 hover:text-zinc-300 transition-colors">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <input type="text" 
+                        id="previewLink" 
+                        value="{{ request.url_root }}preview/{{ media_id }}"
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm text-zinc-300"
+                        readonly
+                    >
+                </div>
+
+                <!-- Download Link -->
+                <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-zinc-400">Download Link</span>
+                        <button onclick="copyToClipboard('downloadLink', this)" class="text-zinc-500 hover:text-zinc-300 transition-colors">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <input type="text" 
+                        id="downloadLink" 
+                        value="{{ request.url_root }}download/{{ media_id }}"
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 text-sm text-zinc-300"
+                        readonly
+                    >
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <a href="{{ url_for('preview', media_id=media_id) }}" class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors">
+                    View Preview
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function copyToClipboard(elementId, button) {
+    const input = document.getElementById(elementId);
+    input.select();
+    document.execCommand('copy');
+
+    const icon = button.querySelector('i');
+    icon.classList.remove('fa-copy');
+    icon.classList.add('fa-check');
+
+    setTimeout(() => {
+        icon.classList.remove('fa-check');
+        icon.classList.add('fa-copy');
+    }, 2000);
+}
+</script>
+{% endblock %}

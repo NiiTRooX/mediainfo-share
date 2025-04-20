@@ -1,0 +1,5 @@
+Flask==3.0.2
+python-dotenv==1.0.1
+cryptography==42.0.5
+black==24.2.0
+Werkzeug>=3.0.0

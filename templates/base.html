@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MediaInfo Share{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><path fill='%232f81f7' d='M352 320c-22.608 0-43.387 7.819-59.79 20.895l-102.486-64.054a96.551 96.551 0 0 0 0-41.683l102.486-64.054C308.613 184.181 329.392 192 352 192c53.019 0 96-42.981 96-96S405.019 0 352 0s-96 42.981-96 96c0 7.158.79 14.13 2.276 20.841L155.79 180.895C139.387 167.819 118.608 160 96 160c-53.019 0-96 42.981-96 96s42.981 96 96 96c22.608 0 43.387-7.819 59.79-20.895l102.486 64.054A96.301 96.301 0 0 0 256 416c0 53.019 42.981 96 96 96s96-42.981 96-96-42.981-96-96-96z'/></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        nav {
+            background-color: rgba(12, 14, 21, 0.8) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+        
+        textarea {
+            background-color: #0f111a !important;
+            color: #7d8590 !important;
+            border: 1px solid #30363d !important;
+        }
+        
+        textarea:focus {
+            border-color: #2f81f7 !important;
+            box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.15) !important;
+        }
+    </style>
+</head>
+<body class="bg-[#0a0b11] text-[#e6edf3] min-h-screen">
+    <!-- Glossy Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                        <i class="fas fa-share-alt text-[#2f81f7] text-xl"></i>
+                        <span class="text-[#e6edf3] font-semibold">MediaInfo Share</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://github.com/AnabolicsAnonymous/mediainfo-share" target="_blank" class="text-[#7d8590] hover:text-[#e6edf3] transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="{{ url_for('donate') }}" class="text-[#7d8590] hover:text-[#e6edf3] transition-colors">
+                        <i class="fas fa-heart text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    {% for category, message in messages %}
+                        <div class="bg-[#0c0e15] border border-[#30363d] rounded-lg p-4 mb-4 text-[#e6edf3]">
+                            <div class="flex items-center">
+                                {% if category == 'error' %}
+                                    <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle text-[#2f81f7] mr-2"></i>
+                                {% endif %}
+                                <span>{{ message }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0c0e15] border-t border-[#30363d] mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <p class="text-[#7d8590] text-sm">© 2024 MediaInfo Share</p>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/AnabolicsAnonymous/mediainfo-share" target="_blank" class="text-[#7d8590] hover:text-[#e6edf3] transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="{{ url_for('donate') }}" class="text-[#7d8590] hover:text-[#e6edf3] transition-colors">
+                        <i class="fas fa-heart"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

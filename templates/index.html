@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4">
+    <div class="mb-12">
+        <div class="flex flex-col items-center text-center space-y-6">
+            <div class="rounded-full bg-gradient-to-r from-[#2f81f7] to-[#1f6feb] bg-opacity-10 p-4">
+                <i class="fas fa-share-nodes text-4xl text-[#2f81f7]"></i>
+            </div>
+            <div class="space-y-4">
+                <h1 class="text-4xl font-semibold text-[#e6edf3]">MediaInfo Share</h1>
+                <p class="text-[#7d8590] text-lg max-w-2xl">
+                    A modern platform for sharing MediaInfo output. Simple, fast, and secure.
+                </p>
+            </div>
+            <div class="flex items-center space-x-4 text-sm">
+                <div class="flex items-center space-x-1 text-[#7d8590]">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Open Source</span>
+                </div>
+                <div class="flex items-center space-x-1 text-[#7d8590]">
+                    <i class="fas fa-shield-halved"></i>
+                    <span>Secure</span>
+                </div>
+                <div class="flex items-center space-x-1 text-[#7d8590]">
+                    <i class="fas fa-bolt"></i>
+                    <span>Fast</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-6">
+        <div class="flex items-center justify-between px-2 mb-3">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-code text-[#7d8590]"></i>
+                <span class="text-sm font-medium text-[#e6edf3]">Share your MediaInfo</span>
+            </div>
+            <div class="flex items-center space-x-2 text-xs text-[#7d8590]">
+                <i class="fas fa-clock"></i>
+                <span>24h expiry</span>
+            </div>
+        </div>
+        <form method="POST" class="space-y-4">
+            <div class="relative">
+                <textarea 
+                    name="mediainfo" 
+                    rows="15" 
+                    class="mono w-full bg-[#0a0b11] rounded-md px-4 py-3 text-sm text-[#e6edf3] placeholder-[#7d8590] focus:outline-none resize-none border border-[#30363d] focus:border-[#2f81f7] focus:ring-2 focus:ring-[#2f81f7] focus:ring-opacity-20"
+                    placeholder="Paste MediaInfo output here..."
+                    required
+                ></textarea>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="text-xs text-[#7d8590]">
+                    <i class="fas fa-shield-halved mr-1"></i>
+                    Your data is encrypted and automatically deleted after 24 hours
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-share-nodes mr-2"></i>
+                    Share MediaInfo
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card p-4">
+            <div class="flex items-start space-x-3">
+                <div class="rounded-lg bg-[#1f6feb] bg-opacity-10 p-2">
+                    <i class="fas fa-shield-halved text-lg text-[#2f81f7]"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-[#e6edf3] mb-1">Secure Sharing</h3>
+                    <p class="text-xs text-[#7d8590]">Your data is encrypted and automatically deleted after 24 hours.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="flex items-start space-x-3">
+                <div class="rounded-lg bg-[#238636] bg-opacity-10 p-2">
+                    <i class="fas fa-bolt text-lg text-[#238636]"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-[#e6edf3] mb-1">Lightning Fast</h3>
+                    <p class="text-xs text-[#7d8590]">Share your MediaInfo output in seconds with our optimized platform.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="flex items-start space-x-3">
+                <div class="rounded-lg bg-[#bf4b8a] bg-opacity-10 p-2">
+                    <i class="fas fa-code text-lg text-[#bf4b8a]"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-[#e6edf3] mb-1">Open Source</h3>
+                    <p class="text-xs text-[#7d8590]">Built with transparency. Check out our code on GitHub.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4">
+    <div class="text-center mb-12">
+        <h1 class="text-2xl font-medium mb-3">Support MediaInfo Share</h1>
+        <p class="text-zinc-400">Help support me to keep me running and to keep this site running as long as possible.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <!-- Bitcoin -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-brands fa-bitcoin text-amber-500 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium mb-4">Bitcoin (BTC)</h3>
+                <div class="w-full">
+                    <input type="text" 
+                        value="{{ donation_addresses.BTC }}" 
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-zinc-300 mb-2"
+                        readonly
+                    >
+                    <button 
+                        onclick="copyToClipboard(this.previousElementSibling, this)"
+                        class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                        <i class="far fa-copy"></i>
+                        <span>Copy Address</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ethereum -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-brands fa-ethereum text-blue-500 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium mb-4">Ethereum (ETH)</h3>
+                <div class="w-full">
+                    <input type="text" 
+                        value="{{ donation_addresses.ETH }}" 
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-zinc-300 mb-2"
+                        readonly
+                    >
+                    <button 
+                        onclick="copyToClipboard(this.previousElementSibling, this)"
+                        class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                        <i class="far fa-copy"></i>
+                        <span>Copy Address</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- USDC -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-dollar-sign text-cyan-500 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium mb-4">USD Coin (USDC)</h3>
+                <div class="w-full">
+                    <input type="text" 
+                        value="{{ donation_addresses.USDC }}" 
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-zinc-300 mb-2"
+                        readonly
+                    >
+                    <button 
+                        onclick="copyToClipboard(this.previousElementSibling, this)"
+                        class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                        <i class="far fa-copy"></i>
+                        <span>Copy Address</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Litecoin -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-6">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-litecoin-sign text-slate-400 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium mb-4">Litecoin (LTC)</h3>
+                <div class="w-full">
+                    <input type="text" 
+                        value="{{ donation_addresses.LTC }}" 
+                        class="mono w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-zinc-300 mb-2"
+                        readonly
+                    >
+                    <button 
+                        onclick="copyToClipboard(this.previousElementSibling, this)"
+                        class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                        <i class="far fa-copy"></i>
+                        <span>Copy Address</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(input, button) {
+    input.select();
+    document.execCommand('copy');
+
+    const icon = button.querySelector('i');
+    const text = button.querySelector('span');
+    
+    icon.classList.remove('fa-copy');
+    icon.classList.add('fa-check');
+    text.textContent = 'Copied!';
+
+    setTimeout(() => {
+        icon.classList.remove('fa-check');
+        icon.classList.add('fa-copy');
+        text.textContent = 'Copy Address';
+    }, 2000);
+}
+</script>
+{% endblock %} 
