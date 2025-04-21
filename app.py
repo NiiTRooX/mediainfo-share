@@ -102,12 +102,18 @@ class MediaInfoShare:
                         f.write(mediainfo_text)
 
                     parsed_info = self.parser.parse_file(file_path)
+
+                    expiration_hours = int(request.form.get("expiration", "0"))
+                    expiration = None
+                    if expiration_hours > 0:
+                        expiration = datetime.now() + timedelta(hours=expiration_hours)
+
                     media = MediaInfoModel(
                         media_id=str(uuid.uuid4()),
                         filename=filename,
                         original_filename="MediaInfo Output",
                         uploaded_on=datetime.now(),
-                        expiration=datetime.now() + timedelta(hours=24),
+                        expiration=expiration,
                         raw_output=mediainfo_text,
                         parsed_info=parsed_info
                     )
