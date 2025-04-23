@@ -45,6 +45,9 @@ class MediaVideo:
     frame_rate: str = ""
     bit_rate: str = ""
     bit_depth: str = ""
+    hdr_format: str = ""
+    color_primaries: str = ""
+    transfer_characteristics: str = ""
 
 
 @dataclass

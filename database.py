@@ -276,6 +276,9 @@ def save_media_info(
                 "frame_rate": "",
                 "bit_rate": "",
                 "bit_depth": "",
+                "hdr_format": "",
+                "color_primaries": "",
+                "transfer_characteristics": ""
             }
         if "audio" not in parsed_info:
             parsed_info["audio"] = []
@@ -335,6 +338,9 @@ def get_media_info(media_id):
                 "frame_rate": "",
                 "bit_rate": "",
                 "bit_depth": "",
+                "hdr_format": "",
+                "color_primaries": "",
+                "transfer_characteristics": ""
             },
             "audio": [],
             "subtitles": [],

@@ -155,6 +155,12 @@ class MediaInfoParser:
                 info["video"]["bit_rate"] = value
             elif key in ["bit depth", "bit depth (bits)"]:
                 info["video"]["bit_depth"] = value
+            elif key == "hdr format":
+                info["video"]["hdr_format"] = value
+            elif key == "color primaries":
+                info["video"]["color_primaries"] = value
+            elif key == "transfer characteristics":
+                info["video"]["transfer_characteristics"] = value
 
         elif section == "audio" and current_track:
             if key == "language":
