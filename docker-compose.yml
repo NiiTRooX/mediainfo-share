@@ -39,7 +39,7 @@ services:
       - LTC_ADDRESS=${LTC_ADDRESS:-}
     command: >
       sh -c "apt-get update && apt-get install -y git gcc &&
-      git clone https://github.com/AnabolicsAnonymous/mediainfo-share.git &&
+      git clone https://github.com/NiiTRooX/mediainfo-share.git &&
       cd mediainfo-share &&
       pip install --no-cache-dir -r requirements.txt &&
       mkdir -p static/media &&
