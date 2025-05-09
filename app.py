@@ -286,27 +286,26 @@ class MediaInfoShare:
                     error_description=str(error) if self.app.debug \
                         else "A file system error occurred."
                 ), 500
-            elif isinstance(error, sqlite3.Error):
+            if isinstance(error, sqlite3.Error):
                 return render_template('error.html',
                     error_code=500,
                     error_title="Database Error",
                     error_description=str(error) if self.app.debug \
                         else "A database error occurred."
                 ), 500
-            elif isinstance(error, RuntimeError):
+            if isinstance(error, RuntimeError):
                 return render_template('error.html',
                     error_code=500,
                     error_title="Processing Error",
                     error_description=str(error) if self.app.debug \
                         else "A processing error occurred."
                 ), 500
-            else:
-                return render_template('error.html',
-                    error_code=500,
-                    error_title="Unexpected Error",
-                    error_description=str(error) if self.app.debug \
-                        else "An unexpected error occurred."
-                ), 500
+            return render_template('error.html',
+                error_code=500,
+                error_title="Unexpected Error",
+                error_description=str(error) if self.app.debug \
+                    else "An unexpected error occurred."
+            ), 500
 
     def run(self):
         """Start the Flask server and run cleanup task"""

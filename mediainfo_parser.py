@@ -71,19 +71,19 @@ class MediaInfoParser:
                     current_track = None
                     current_track_type = None
                     continue
-                elif line.startswith("Video"):
+                if line.startswith("Video"):
                     current_section = "video"
                     current_track = None
                     current_track_type = None
                     continue
-                elif line.startswith("Audio"):
+                if line.startswith("Audio"):
                     if current_track and current_track_type == "audio":
                         info["audio"].append(current_track.__dict__)
                     current_section = "audio"
                     current_track = AudioTrack()
                     current_track_type = "audio"
                     continue
-                elif line.startswith("Text"):
+                if line.startswith("Text"):
                     if current_track and current_track_type == "audio":
                         info["audio"].append(current_track.__dict__)
                     if current_track and current_track_type == "text":
@@ -92,7 +92,7 @@ class MediaInfoParser:
                     current_track = SubtitleTrack()
                     current_track_type = "text"
                     continue
-                elif line == "Menu":
+                if line == "Menu":
                     if current_track and current_track_type == "text":
                         info["subtitles"].append(current_track.__dict__)
                     current_section = "menu"
@@ -108,14 +108,14 @@ class MediaInfoParser:
 
             if current_track and current_track_type == "audio":
                 info["audio"].append(current_track.__dict__)
-                
+
             if current_track and current_track_type == "text":
                 info["subtitles"].append(current_track.__dict__)
 
             for track in info["audio"]:
                 if track.get("language"):
                     track["flag"] = self.get_language_flag(track["language"])
-                    
+
             for track in info["subtitles"]:
                 if track.get("language"):
                     track["flag"] = self.get_language_flag(track["language"])
@@ -123,6 +123,7 @@ class MediaInfoParser:
             return info
 
         except Exception as e:
+            print(f"Error parsing MediaInfo: {str(e)}")
             raise
 
     def _parse_key_value(
