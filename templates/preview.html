@@ -21,6 +21,10 @@
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Duration:</span> <span class="font-normal">{{ media_info.general.duration }}</span></p>
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Bitrate:</span> <span class="font-normal">{{ media_info.general.bitrate }}</span></p>
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Size:</span> <span class="font-normal">{{ media_info.general.size }}</span></p>
+                        {% if media_info.general.movie_name %}
+                        <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Movie name:</span> <span class="font-normal">{{ media_info.general.movie_name }}</span></p>
+                        {% endif %}
+
                     </div>
                 </div>
 
@@ -33,6 +37,12 @@
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Aspect Ratio:</span> <span class="font-normal">{{ media_info.video.aspect_ratio }}</span></p>
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Frame Rate:</span> <span class="font-normal">{{ media_info.video.frame_rate }}</span></p>
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Bit Depth:</span> <span class="font-normal">{{ media_info.video.bit_depth }}</span></p>
+                        {% if media_info.video.stream_size %}
+                        <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Stream size:</span> <span class="font-normal">{{ media_info.video.stream_size }}</span></p>
+                        {% endif %}
+                        {% if media_info.video.title %}
+                        <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Title:</span> <span class="font-normal">{{ media_info.video.title }}</span></p>
+                        {% endif %}
                         {% if media_info.video.hdr_format %}
                         <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">HDR Format:</span> <span class="font-normal">{{ media_info.video.hdr_format }}</span></p>
                         {% endif %}
@@ -86,12 +96,22 @@
                                         <span class="text-[#8b949e] w-32 font-bold">Sampling Rate:</span>
                                         <span class="text-[#e6edf3] font-normal">{{ track.sampling_rate }}</span>
                                     </div>
+                                    {% if track.stream_size %}
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Stream size:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.stream_size }}</span>
+                                    </div>
+                                    {% endif %}
                                     {% if track.title %}
                                     <div class="flex items-center">
                                         <span class="text-[#8b949e] w-32 font-bold">Title:</span>
                                         <span class="text-[#e6edf3] font-normal">{{ track.title }}</span>
                                     </div>
                                     {% endif %}
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Default:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.default }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -106,9 +126,36 @@
             <div class="mt-6">
                 <div class="bg-[#0f111a] border border-[#30363d] rounded-lg p-4">
                     <h2 class="text-xl font-semibold text-[#e6edf3] mb-4">Subtitles</h2>
-                    <div class="space-y-2">
-                        {% for sub in media_info.subtitles %}
-                        <p class="text-[#7d8590]"><span class="font-bold text-[#e6edf3]">Language:</span> <span class="font-normal">{{ sub.language }} {{ sub.flag }}</span></p>
+                    <div class="space-y-6">
+                        {% for track in media_info.subtitles %}
+                        <div class="{% if not loop.last %}border-b border-[#30363d] pb-6{% endif %}">
+                            <h3 class="text-lg font-medium text-[#e6edf3] mb-4">Track {{ loop.index }}</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Language:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.language }}</span>
+                                        {% if track.flag %}
+                                        <span class="ml-2">{{ track.flag }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Title:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.title }}</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Default:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.default }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="text-[#8b949e] w-32 font-bold">Forced:</span>
+                                        <span class="text-[#e6edf3] font-normal">{{ track.forced }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

@@ -11,8 +11,8 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 """
 
-from typing import Dict, Optional
-from models import AudioTrack
+from typing import Dict, Optional, Union
+from models import AudioTrack, SubtitleTrack
 
 class MediaInfoParser:
     """Class for parsing MediaInfo output into a dictionary"""
@@ -67,6 +67,7 @@ class MediaInfoParser:
                 if not line:
                     continue
 
+                # print(info)
                 if line == "General":
                     current_section = "general"
                     current_track = None
@@ -87,11 +88,16 @@ class MediaInfoParser:
                 elif line.startswith("Text"):
                     if current_track and current_track_type == "audio":
                         info["audio"].append(current_track.__dict__)
+                    if current_track and current_track_type == "text":
+                        info["subtitles"].append(current_track.__dict__)
+                        print("test")
                     current_section = "text"
-                    current_track = None
+                    current_track = SubtitleTrack()
                     current_track_type = "text"
                     continue
                 elif line == "Menu":
+                    if current_track and current_track_type == "text":
+                        info["subtitles"].append(current_track.__dict__)
                     current_section = "menu"
                     current_track = None
                     current_track_type = None
@@ -105,14 +111,25 @@ class MediaInfoParser:
 
             if current_track and current_track_type == "audio":
                 info["audio"].append(current_track.__dict__)
+                
+            if current_track and current_track_type == "text":
+                info["subtitles"].append(current_track.__dict__)
 
             for track in info["audio"]:
+                if track.get("language"):
+                    track["flag"] = self.get_language_flag(track["language"])
+                    
+            for track in info["subtitles"]:
                 if track.get("language"):
                     track["flag"] = self.get_language_flag(track["language"])
 
             return info
 
         except Exception as e:
+            print("current_section:", current_section)
+            print("current_track:", current_track, line)
+            print("current_track_type:", current_track_type)
+            print("line:", line)
             print(f"Error parsing MediaInfo: {str(e)}")
             raise
 
@@ -122,7 +139,7 @@ class MediaInfoParser:
         value: str,
         section: str,
         info: Dict,
-        current_track: Optional[AudioTrack],
+        current_track: Union[AudioTrack, SubtitleTrack, None],
     ) -> None:
         key = key.lower()
 
@@ -139,6 +156,8 @@ class MediaInfoParser:
                 info["general"]["frame_rate"] = value
             elif key == "complete name":
                 info["general"]["complete_name"] = value
+            elif key == "movie name":
+                info["general"]["movie_name"] = value
 
         elif section == "video":
             if key == "format":
@@ -161,6 +180,10 @@ class MediaInfoParser:
                 info["video"]["color_primaries"] = value
             elif key == "transfer characteristics":
                 info["video"]["transfer_characteristics"] = value
+            elif key == "title":
+                info["video"]["title"] = value
+            elif key == "stream size":
+                info["video"]["stream_size"] = value
 
         elif section == "audio" and current_track:
             if key == "language":
@@ -179,9 +202,17 @@ class MediaInfoParser:
                 current_track.commercial_name = value
             elif key == "title":
                 current_track.title = value
+            elif key == "stream size":
+                current_track.stream_size = value
+            elif key == "default":
+                current_track.default = value
 
-        elif section == "text" and key == "language":
-            info["subtitles"].append({
-                "language": value,
-                "flag": self.get_language_flag(value)
-            })
+        elif section == "text" and current_track:
+            if key == "language":
+                current_track.language = value
+            elif key == "title":
+                current_track.title = value
+            elif key == "default":
+                current_track.default = value
+            elif key == "forced":
+                current_track.forced = value

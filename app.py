@@ -56,7 +56,7 @@ class MediaInfoShare:
                 key = Fernet.generate_key().decode()
             else:
                 key = key.encode()
-                key = base64.urlsafe_b64encode(base64.urlsafe_b64decode(key)).decode()
+                key = base64.urlsafe_b64encode(key).decode()
         except ValueError as err:
             print(f"Invalid ENCRYPTION_KEY format: {err}")
             key = Fernet.generate_key().decode()

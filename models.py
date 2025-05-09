@@ -33,6 +33,7 @@ class MediaGeneral:
     size: str = ""
     frame_rate: str = ""
     complete_name: str = ""
+    movie_name: str = ""
 
 
 @dataclass
@@ -48,6 +49,8 @@ class MediaVideo:
     hdr_format: str = ""
     color_primaries: str = ""
     transfer_characteristics: str = ""
+    title: str = ""
+    stream_size: str = ""
 
 
 @dataclass
@@ -62,6 +65,8 @@ class AudioTrack:
     commercial_name: str = ""
     title: str = ""
     flag: str = ""
+    stream_size: str = ""
+    default: str = ""
 
 
 @dataclass
@@ -69,6 +74,9 @@ class SubtitleTrack:
     """Class for storing subtitle track information"""
     language: str = ""
     flag: str = ""
+    title: str = ""
+    default: str = ""
+    forced: str = ""
 
 
 @dataclass
