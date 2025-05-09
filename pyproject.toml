@@ -1,0 +1,13 @@
+[project]
+name = "mediainfo-share"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "black==24.2.0",
+    "cryptography==42.0.5",
+    "flask==3.0.2",
+    "python-dotenv==1.0.1",
+    "werkzeug>=3.0.0",
+]
