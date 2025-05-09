@@ -266,6 +266,7 @@ def save_media_info(
                 "duration": "",
                 "bitrate": "",
                 "size": "",
+                "movie_name": ""
             }
         if "video" not in parsed_info:
             parsed_info["video"] = {
@@ -278,7 +279,9 @@ def save_media_info(
                 "bit_depth": "",
                 "hdr_format": "",
                 "color_primaries": "",
-                "transfer_characteristics": ""
+                "transfer_characteristics": "",
+                "title": "",
+                "stream_size": ""
             }
         if "audio" not in parsed_info:
             parsed_info["audio"] = []
@@ -329,7 +332,7 @@ def get_media_info(media_id):
         media_dict = dict(media)
 
         default_structure = {
-            "general": {"format": "", "duration": "", "bitrate": "", "size": ""},
+            "general": {"format": "", "duration": "", "bitrate": "", "size": "", "movie_name": ""},
             "video": {
                 "format": "",
                 "width": "", 
@@ -340,7 +343,9 @@ def get_media_info(media_id):
                 "bit_depth": "",
                 "hdr_format": "",
                 "color_primaries": "",
-                "transfer_characteristics": ""
+                "transfer_characteristics": "",
+                "title": "",
+                "stream_size": ""
             },
             "audio": [],
             "subtitles": [],
