@@ -66,8 +66,6 @@ class MediaInfoParser:
                 line = line.strip()
                 if not line:
                     continue
-
-                # print(info)
                 if line == "General":
                     current_section = "general"
                     current_track = None
@@ -90,7 +88,6 @@ class MediaInfoParser:
                         info["audio"].append(current_track.__dict__)
                     if current_track and current_track_type == "text":
                         info["subtitles"].append(current_track.__dict__)
-                        print("test")
                     current_section = "text"
                     current_track = SubtitleTrack()
                     current_track_type = "text"
@@ -126,11 +123,6 @@ class MediaInfoParser:
             return info
 
         except Exception as e:
-            print("current_section:", current_section)
-            print("current_track:", current_track, line)
-            print("current_track_type:", current_track_type)
-            print("line:", line)
-            print(f"Error parsing MediaInfo: {str(e)}")
             raise
 
     def _parse_key_value(
