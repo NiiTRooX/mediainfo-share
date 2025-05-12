@@ -41,7 +41,7 @@ class MediaInfoShare:
     """Main class for the application"""
     def __init__(self):
         self.app = Flask(__name__)
-        self.db = Database()
+        self.db = Database(os.getenv("DB_PATH"))
         self.parser = MediaInfoParser()
         self._setup_config()
         self._setup_routes()

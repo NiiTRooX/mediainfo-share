@@ -22,9 +22,12 @@ services:
       - USE_SSL=${USE_SSL:-false}
       
       # Upload Configuration
-      - UPLOAD_FOLDER=${UPLOAD_FOLDER:-static/media}
+      - UPLOAD_FOLDER=/app/static/media
       - MAX_CONTENT_LENGTH=${MAX_CONTENT_LENGTH:-1048576}
       - ALLOWED_EXTENSIONS=${ALLOWED_EXTENSIONS:-txt}
+
+      # DB Configuration
+      - DB_PATH=/app/mediainfo.db
       
       # Encryption
       - SECRET_KEY=${SECRET_KEY}
