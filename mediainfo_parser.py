@@ -183,8 +183,24 @@ class MediaInfoParser:
                 current_track.language = value
             elif key == "format":
                 current_track.format = value
-            elif key in ["channel(s)", "channels"]:
-                current_track.channels = value
+            elif key == "channel layout":
+                main_channel_names = ["Lscr", "Rscr", "C", "Lc", "Rc", "L", "R", "Lw", "Rw", "Lss", "Rss", "Ls", "Rs", "Lsd", "Rsd", "Lb", "Rb", "Cb", "M"]
+                height_channel_names = ["Bfc", "Bfl", "Bfr", "Tfc", "Vhl", "Vhr", "Tfl", "Tfr", "Tsl", "Tsr", "Lvs", "Rvs", "Tbl", "Tbr", "Tbc", "Tc"]
+                lfe_channel_names = ["LFE", "LFE2"]
+                main_channels = 0
+                lfe_channels = 0
+                height_channels = 0
+                channels = value.split()
+                for channel in channels:
+                    if channel in main_channel_names:
+                        main_channels += 1
+                        continue
+                    if channel in lfe_channel_names:
+                        lfe_channels += 1
+                        continue
+                    if channel in height_channel_names:
+                        height_channels += 1
+                current_track.channels = f"{main_channels}.{lfe_channels}{f'.{height_channels}' if height_channels > 0 else ''}"
             elif key in ["bit rate", "nominal bit rate"]:
                 current_track.bit_rate = value
             elif key == "format settings":
