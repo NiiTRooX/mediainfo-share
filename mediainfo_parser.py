@@ -183,6 +183,8 @@ class MediaInfoParser:
                 current_track.language = value
             elif key == "format":
                 current_track.format = value
+            elif key in ["channel(s)", "channels"] and not current_track.channels:
+                current_track.channels = value
             elif key == "channel layout":
                 main_channel_names = ["Lscr", "Rscr", "C", "Lc", "Rc", "L", "R", "Lw", "Rw", "Lss", "Rss", "Ls", "Rs", "Lsd", "Rsd", "Lb", "Rb", "Cb", "M"]
                 height_channel_names = ["Bfc", "Bfl", "Bfr", "Tfc", "Vhl", "Vhr", "Tfl", "Tfr", "Tsl", "Tsr", "Lvs", "Rvs", "Tbl", "Tbr", "Tbc", "Tc"]
