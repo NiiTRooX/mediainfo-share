@@ -45,7 +45,11 @@ A modern web application for sharing MediaInfo output with a clean, user-friendl
 
 1. Start the Flask development server:
    ```bash
-   flask run
+   flask run  # doesn't work
+   ```
+   Use this instead:
+   ```bash
+   python3 app.py
    ```
 
 2. Open your browser and navigate to `http://localhost:5000`
