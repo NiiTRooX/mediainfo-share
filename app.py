@@ -254,7 +254,7 @@ class MediaInfoShare:
 
     def _setup_error_handlers(self):
         @self.app.errorhandler(404)
-        def not_found_error():
+        def not_found_error(error):
             return render_template('error.html',
                 error_code=404,
                 error_title="Page Not Found",
@@ -262,7 +262,7 @@ class MediaInfoShare:
             ), 404
 
         @self.app.errorhandler(403)
-        def forbidden_error():
+        def forbidden_error(error):
             return render_template('error.html',
                 error_code=403,
                 error_title="Forbidden",
@@ -270,7 +270,7 @@ class MediaInfoShare:
             ), 403
 
         @self.app.errorhandler(500)
-        def internal_error():
+        def internal_error(error):
             return render_template('error.html',
                 error_code=500,
                 error_title="Internal Server Error",
